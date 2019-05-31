@@ -1,0 +1,25 @@
+.recipe-card{
+    position: relative;
+    z-index: 1;
+}
+.recipe-card img{
+	width: 100%;
+	height: 60%;
+	object-fit: contain;
+}
+.recipe-body{
+	height: 30%;
+}
+.recipe-card input{
+	opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-indent:-999px;
+    z-index: 2;
+}
+.recipe-card input:hover{
+	opacity: 0.3;
+}
