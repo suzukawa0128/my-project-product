@@ -16,6 +16,9 @@ public class SaveProcAction extends ActionSupport implements SessionAware{
 	private Map<String, Object> session;
 
 	public String execute(){
+		if(session.isEmpty()){
+			return "sessionTimeout";
+		}
 //		手順がない、かつ手順の入力なし。もしくは、手順がある、かつ手順の入力なし
 		if(proc==null){
 			session.put("procList", procList);

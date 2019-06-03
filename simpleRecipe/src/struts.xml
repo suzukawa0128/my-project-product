@@ -8,20 +8,27 @@
 	<package name = "com.amazonaws.compute.apnortheast1.ec21311515583.action" extends = "struts-default">
 
 		<!-- ヘッダー -->
+		<action name="GoAdminRecipeAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.GoAdminRecipeAction" method="execute">
+			<result name="success">admin.jsp</result>
+			<result name="sessionTimeout">sessionError.jsp</result>
+		</action>
+
 		<action name="GoLoginAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.GoLoginAction" method="execute">
 			<result name="success">home.jsp</result>
 		</action>
 
 		<action name="LogoutAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.LogoutAction" method="execute">
 			<result name="success">home.jsp</result>
+			<result name="sessionTimeout">sessionError.jsp</result>
 		</action>
 
-		<action name="GoAllRecipeAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.GoAllRecipeAction" method="execute">
+		<action name="GoPublicRecipeAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.GoPublicRecipeAction" method="execute">
 			<result name="success">publicRecipe.jsp</result>
 		</action>
 
 		<action name="GoMyPageAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.GoMyPageAction" method="execute">
 			<result name="success">myPage.jsp</result>
+			<result name="sessionTimeout">sessionError.jsp</result>
 		</action>
 
 		<action name="GoCreateRecipeAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.GoCreateRecipeAction" method="execute">
@@ -31,6 +38,7 @@
 		<!-- ホーム画面 -->
 		<action name="LoginAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.LoginAction" method="execute">
 			<result name="success">myPage.jsp</result>
+			<result name="admin">admin.jsp</result>
 			<result name="error">home.jsp</result>
 		</action>
 
@@ -38,7 +46,7 @@
 			<result name="success">userCreate.jsp</result>
 		</action>
 
-		<!-- ユーザー登録画面 -->
+		<!-- ユーザー登録 -->
 		<action name="UserCreateConfirmAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.UserCreateConfirmAction" method="execute">
 			<result name="success">userCreateConfirm.jsp</result>
 			<result name="error">userCreate.jsp</result>
@@ -48,12 +56,10 @@
 			<result name="success">home.jsp</result>
 		</action>
 
-		<action name="HomeAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.HomeAction" method="execute">
-			<result name="success">myPage.jsp</result>
-		</action>
-
 		<action name="CreateRecipeAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.CreateRecipeAction" method="execute">
 			<result name="success">myPage.jsp</result>
+			<result name="error">recipeCreate.jsp</result>
+			<result name="sessionTimeout">sessionError.jsp</result>
 		</action>
 
 		<!-- レシピ登録画面でsave -->
@@ -71,10 +77,12 @@
 
 		<action name="TagModalAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.saveAction.TagModalAction" method="execute">
 			<result name="success">recipeCreate.jsp</result>
+			<result name="sessionTimeout">sessionError.jsp</result>
 		</action>
 
 		<action name="IngModalAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.saveAction.IngModalAction" method="execute">
 			<result name="success">recipeCreate.jsp</result>
+			<result name="sessionTimeout">sessionError.jsp</result>
 		</action>
 
 		<action name="SaveCookingTimeAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.saveAction.SaveCookingTimeAction" method="execute">
@@ -83,22 +91,40 @@
 
 		<action name="SaveProcAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.saveAction.SaveProcAction" method="execute">
 			<result name="success">recipeCreate.jsp</result>
+			<result name="sessionTimeout">sessionError.jsp</result>
 		</action>
 
-		<!-- レシピ詳細 -->
+		<!-- みんなのレシピ、マイページ画面 -->
+		<action name="SearchTagAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.SearchTagAction" method="execute">
+			<result name="myPage">myPage.jsp</result>
+			<result name="publicRecipe">publicRecipe.jsp</result>
+			<result name="sessionTimeout">sessionError.jsp</result>
+		</action>
+
 		<action name="RecipeDetailAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.RecipeDetailAction" method="execute">
 			<result name="success">recipeDetail.jsp</result>
 			<result name="sessionTimeout">sessionError.jsp</result>
 		</action>
 
+		<action name="GoThisPageAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.GoThisPageAction" method="execute">
+			<result name="publicRecipe">publicRecipe.jsp</result>
+			<result name="myPage">myPage.jsp</result>
+			<result name="admin">admin.jsp</result>
+			<result name="sessionTimeout">sessionError.jsp</result>
+		</action>
+
+		<!-- レシピ詳細 -->
 		<action name="RecipeDeleteAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.RecipeDeleteAction" method="execute">
 			<result name="success">myPage.jsp</result>
 			<result name="error">recipeDetail.jsp</result>
+			<result name="sessionTimeout">sessionError.jsp</result>
 		</action>
 
 		<!-- レシピ編集 -->
 		<action name="EditRecipeAction" class="com.amazonaws.compute.apnortheast1.ec21311515583.action.EditRecipeAction" method="execute">
 			<result name="success">recipeCreate.jsp</result>
+			<result name="error">home.jsp</result>
+			<result name="sessionTimeout">sessionError.jsp</result>
 		</action>
 
 	</package>

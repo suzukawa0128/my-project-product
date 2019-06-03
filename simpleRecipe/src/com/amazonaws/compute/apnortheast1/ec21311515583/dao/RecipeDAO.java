@@ -85,8 +85,16 @@ public class RecipeDAO{
 				}
 			}
 			dishInfoPs.setInt(15, recipe.getCookingTime());
-			dishInfoPs.setString(16, recipe.getImageFilePath());
-			dishInfoPs.setString(17, recipe.getImageFileName());
+			if(recipe.getImageFilePath()=="null"){
+				dishInfoPs.setString(16, "./images");
+			}else{
+				dishInfoPs.setString(16, recipe.getImageFilePath());
+			}
+			if(recipe.getImageFileName()=="null"){
+				dishInfoPs.setString(17, "img1.jpg");
+			}else{
+				dishInfoPs.setString(17, recipe.getImageFileName());
+			}
 			dishInfoPs.setBoolean(18, recipe.isPublicity());
 			int r;
 			r = dishInfoPs.executeUpdate();
@@ -238,6 +246,65 @@ public class RecipeDAO{
 		return ret;
 	}
 
+//	admin権限で全てのレシピを持ってくるメソッド
+	public List<RecipeDTO> getAllRecipe(){
+		List<RecipeDTO> recipeList = new ArrayList<RecipeDTO>();
+		String sql = "SELECT id, author, dish_name, dish_info, ing, "
+				+ "proc_1, proc_2, proc_3, proc_4, proc_5, proc_6, proc_7, proc_8, proc_9, proc_10, "
+				+ "cooking_time, image_file_path, image_file_name "
+				+ "FROM dish_info ORDER BY updated_date DESC";
+		Connection conn = null;
+		try{
+			DBConnector db = new DBConnector();
+			conn = db.getConnection();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				RecipeDTO recipe = new RecipeDTO();
+				TagDAO tagDAO = new TagDAO();
+				List<String> tagList = new ArrayList<String>();
+				List<List<String>> ingAmountList = new ArrayList<List<String>>();
+				List<String> procList = new ArrayList<String>();
+				recipe.setDishId(String.valueOf(rs.getInt("id")));
+				recipe.setAuthor(rs.getString("author"));
+				recipe.setDishName(rs.getString("dish_name"));
+				recipe.setDishInfo(rs.getString("dish_info"));
+				tagList = tagDAO.getTagListByDB(rs.getString("id"));
+				recipe.setTagList(tagList);
+				String ingAmount = rs.getString("ing");
+				if(ingAmount!=null){
+					List<String> tempList = new ArrayList<String>();
+					tempList = Arrays.asList(ingAmount.split("[\\s]*,[\\s]*")); // (材料/分量)のStringが詰まったリスト
+					for(String ingSet:tempList){
+						List<String> ingSetList = new ArrayList<String>();
+						ingSetList = Arrays.asList(ingSet.split("[\\s]*/[\\s]*"));
+						ingAmountList.add(ingSetList);
+					}
+				}
+				recipe.setIngAmountList(ingAmountList);
+				for(int i=1;i<=10;i++){
+					String p = rs.getString("proc_"+i);
+					if(p!=null){
+						procList.add(p);
+					}
+				}
+				recipe.setProcList(procList);
+				recipe.setCookingTime(rs.getInt("cooking_time"));
+				recipe.setImageFilePath(rs.getString("image_file_path"));
+				recipe.setImageFileName(rs.getString("image_file_name"));
+				recipeList.add(recipe);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			try{
+				conn.close();
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+		}
+		return recipeList;
+	}
 
 //	公開される全てのレシピを持ってくるメソッド
 	public List<RecipeDTO> getPublicRecipe(){
@@ -377,10 +444,10 @@ public class RecipeDAO{
 			ps.setString(1, dishId);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()){
-				TagDAO tagDAO = new TagDAO();
 				recipe.setAuthor(rs.getString("author"));
 				recipe.setDishName(rs.getString("dish_name"));
 				recipe.setDishInfo(rs.getString("dish_info"));
+				TagDAO tagDAO = new TagDAO();
 				tagList = tagDAO.getTagListByDB(dishId);
 				recipe.setTagList(tagList);
 				String ingAmount = rs.getString("ing");

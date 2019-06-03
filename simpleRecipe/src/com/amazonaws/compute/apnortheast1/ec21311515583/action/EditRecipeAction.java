@@ -11,7 +11,13 @@ public class EditRecipeAction extends ActionSupport implements SessionAware{
 	private Map<String, Object> session;
 
 	public String execute(){
-		return SUCCESS;
+		if(session.isEmpty()){
+			return "sessionTimeout";
+		}else if(session.containsKey("userId")){
+			return SUCCESS;
+		}else{
+			return ERROR;
+		}
 	}
 
 	public Map<String, Object> getSession() {

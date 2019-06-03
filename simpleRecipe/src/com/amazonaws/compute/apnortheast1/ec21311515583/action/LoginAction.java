@@ -8,7 +8,9 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import com.amazonaws.compute.apnortheast1.ec21311515583.dao.RecipeDAO;
 import com.amazonaws.compute.apnortheast1.ec21311515583.dao.UserInfoDAO;
+import com.amazonaws.compute.apnortheast1.ec21311515583.dto.PaginationDTO;
 import com.amazonaws.compute.apnortheast1.ec21311515583.dto.RecipeDTO;
+import com.amazonaws.compute.apnortheast1.ec21311515583.util.Pagination;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class LoginAction extends ActionSupport implements SessionAware{
@@ -19,9 +21,26 @@ public class LoginAction extends ActionSupport implements SessionAware{
 
 	public String execute(){
 		String result = ERROR;
+		boolean adminRes = false;
 		boolean res = false;
 		UserInfoDAO userInfoDAO = new UserInfoDAO();
-
+		adminRes = userInfoDAO.adminCheck(mail, pass);
+		if(adminRes){
+			RecipeDAO dao = new RecipeDAO();
+			String userId = userInfoDAO.getUserIdFromDB(mail);
+			session.put("userId", userId);
+			session.put("adminFlg", "1");
+			List<RecipeDTO> allRecipeList = new ArrayList<RecipeDTO>();
+			allRecipeList = dao.getAllRecipe();
+			session.put("allRecipeList", allRecipeList);
+			Pagination pagination = new Pagination();
+			PaginationDTO paginationDTO = new PaginationDTO();
+			paginationDTO = pagination.getPage(allRecipeList, 20, 1);
+			session.put("totalPageSize", paginationDTO.getTotalPageSize());
+			session.put("currentPageNo", paginationDTO.getCurrentPageNo());
+			session.put("allRecipeListForCurrentPage", paginationDTO.getRecipeListForCurrentPage());
+			return "admin";
+		}
 		res = userInfoDAO.UserLogin(mail, pass);
 
 		if(res){
@@ -32,7 +51,14 @@ public class LoginAction extends ActionSupport implements SessionAware{
 			RecipeDAO recipeDAO = new RecipeDAO();
 			List<RecipeDTO> recipeList = new ArrayList<RecipeDTO>();
 			recipeList = recipeDAO.getUsersRecipe(userId);
-			session.put("recipeList", recipeList);
+			session.put("myRecipeList", recipeList);
+
+			Pagination pagination = new Pagination();
+			PaginationDTO paginationDTO = new PaginationDTO();
+			paginationDTO = pagination.getPage(recipeList, 20, 1);
+			session.put("totalPageSize", paginationDTO.getTotalPageSize());
+			session.put("currentPageNo", paginationDTO.getCurrentPageNo());
+			session.put("myRecipeListForCurrentPage", paginationDTO.getRecipeListForCurrentPage());
 		}
 		return result;
 	}

@@ -14,10 +14,6 @@ public class CommonUtility {
 		return value;
 	}
 
-	public String[] parseArrayList(String s){
-		return s.split(", ",0);
-	}
-
 	public <E> List<List<E>>  devideList(List<E> list, int size){
 		if(list == null || list.isEmpty() || size <=0){
 			return null;

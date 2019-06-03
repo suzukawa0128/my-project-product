@@ -15,6 +15,9 @@ public class RecipeDetailAction extends ActionSupport implements SessionAware{
 	private Map<String, Object> session;
 
 	public String execute(){
+		if(session.isEmpty()){
+			return "sessionTimeout";
+		}
 		RecipeDAO dao = new RecipeDAO();
 		RecipeDTO recipe = new RecipeDTO();
 		recipe = dao.getRecipeInfo(dishId);

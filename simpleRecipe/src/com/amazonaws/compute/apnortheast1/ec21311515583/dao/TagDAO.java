@@ -99,7 +99,10 @@ public class TagDAO {
 			PreparedStatement tagMapPs = conn.prepareStatement(tagMapSql);
 			tagMapPs.setInt(1, Integer.parseInt(dishId));
 			tagMapPs.setInt(2, Integer.parseInt(tagId));
-			ret = tagMapPs.execute();
+			int r = tagMapPs.executeUpdate();
+			if(r==1){
+				ret = true;
+			}
 		}catch(SQLException e){
 			e.printStackTrace();
 		}finally{

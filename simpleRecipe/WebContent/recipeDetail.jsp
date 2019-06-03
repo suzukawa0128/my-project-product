@@ -19,7 +19,6 @@
         <header></header>
 
         <h1 class="text-center">レシピ詳細画面</h1>
-		<s:form id="editForm" action="EditRecipeAction">
 	        <div class="menu container bg-light border border-dark">
 	            <div class="row">
 	                <div class="col-6 p-5">
@@ -31,15 +30,20 @@
 	                		<h3><s:property value="#session.dishName"/></h3>
 	                		<s:property value="#session.dishInfo"/>
 	                	</div>
-	                	<div class="box mb-3">
+	                	<div class="box mb-3 clearfix">
 	                		<label>タグ</label>
-	                			<ul>
-	                				<s:iterator value="#session.tagList">
-	                					<li><s:property/></li>
-	                				</s:iterator>
-	                			</ul>
+                			<div class="ml-2">
+                				<s:iterator value="#session.tagList" var="tag">
+               						<s:form action="SearchTagAction">
+               							<div class="float-left mr-2">
+                							<s:hidden name="tagName" value="%{tag}"/>
+                							<s:submit value="%{tag}"/>
+               							</div>
+               						</s:form>
+                				</s:iterator>
+                			</div>
 	                	</div>
-	                	<div class="box mb-3">
+	                	<div class="box mb-3 clearfix">
 	                		<label>材料・分量</label>
 	                			<ul>
 		                			<s:iterator value="#session.ingAmountList">
@@ -77,15 +81,16 @@
 	                </div>
 	            </div>
 	        </div>
-	        <s:if test="#session.userId==#session.author">
-		        <div class="text-center mt-2">
+	        <s:if test="#session.userId==#session.author || #session.adminFlg!=null">
+		<s:form id="editForm" action="EditRecipeAction">
+		        <div class="text-center my-3">
 		        	<button type="button" class="btn btn-success" onclick="editRecipeAction()">レシピを編集する</button>
-		        </div>
-		        <div class="text-right w-75 mb-3">
-		        	<a href='<s:url action="RecipeDeleteAction"/>' class="btn btn-danger">レシピを削除する</a>
+			        </div>
+        </s:form>
+		        <div class="text-center mb-3">
+		        	<a href='<s:url action="RecipeDeleteAction"/>' class="btn btn-danger" onclick='return confirm("本当にレシピを削除しますか？");'>レシピを削除する</a>
 		        </div>
 			</s:if>
-        </s:form>
         <script src="script.js"></script>
     </body>
 </html>

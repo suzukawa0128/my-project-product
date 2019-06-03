@@ -11,6 +11,9 @@ public class LogoutAction extends ActionSupport implements SessionAware{
 	private Map<String, Object> session;
 
 	public String execute(){
+		if(session.isEmpty()){
+			return "sessionTimeout";
+		}
 		String result = ERROR;
 		if(session.containsKey("userId")){
 			session.clear();

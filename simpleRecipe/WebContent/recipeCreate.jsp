@@ -207,8 +207,9 @@
         <!-- ここからメイン画面 -->
 
         <h1 class="text-center">レシピ登録</h1>
-
-
+		<s:if test="errorMsg!=null">
+			<div class="text-center"><s:property value="errorMsg"/></div>
+		</s:if>
 
 		<s:form id="recipeForm" action="CreateRecipeAction">
 	        <div class="menu container bg-light border border-dark">
@@ -340,7 +341,7 @@
 	        </div>
 	        <div class="container text-center">
 	        	<div class="mx-auto">
-		        	<a href='<s:url action="HomeAction"/>' class="btn btn-secondary">キャンセル</a>
+		        	<a href='<s:url action="GoMyPageAction"/>' class="btn btn-secondary">キャンセル</a>
 		        	<s:hidden name="dishId" value="#session.dishId"/>
 		        	<s:hidden name="imageFilePath" value="#session.imageFilePath"/>
 		        	<s:hidden name="imageFileName" value="#session.imageFileName"/>

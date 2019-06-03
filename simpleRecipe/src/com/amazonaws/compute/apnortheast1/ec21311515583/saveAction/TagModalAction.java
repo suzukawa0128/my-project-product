@@ -17,18 +17,9 @@ public class TagModalAction extends ActionSupport implements SessionAware{
 	private Map<String, Object> session;
 
 	public String execute(){
-
-		//test
-//		System.out.println("tagList");
-//		System.out.println(tagList==null);
-//		System.out.println(tagList.size()==0);
-//		for(String tag:tagList){
-//			System.out.println(tag);
-//		}
-//		System.out.println("tag");
-//		System.out.println(tag);
-		//test
-
+		if(session.isEmpty()){
+			return "sessionTimeout";
+		}
 //		何も変更せずokを押下した場合、tag==null
 //		tag.isEmpty()でヌルポを避けるためSUCCESSを返す
 //		tagListが変更されている場合はtagListをセッションに入れ直す必要がある
@@ -51,37 +42,28 @@ public class TagModalAction extends ActionSupport implements SessionAware{
 		session.put("tagList", tagList);
 		return SUCCESS;
 	}
-
 	public String getDishName() {
 		return dishName;
 	}
-
 	public void setDishName(String dishName) {
 		this.dishName = dishName;
 	}
-
 	public String getTag() {
 		return tag;
 	}
-
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
-
 	public List<String> getTagList() {
 		return tagList;
 	}
-
 	public void setTagList(List<String> tagList) {
 		this.tagList = tagList;
 	}
-
 	public Map<String, Object> getSession() {
 		return session;
 	}
-
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
 	}
-
 }

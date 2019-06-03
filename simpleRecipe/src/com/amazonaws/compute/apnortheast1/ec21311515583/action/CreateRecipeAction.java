@@ -7,7 +7,9 @@ import java.util.Map;
 import org.apache.struts2.interceptor.SessionAware;
 
 import com.amazonaws.compute.apnortheast1.ec21311515583.dao.RecipeDAO;
+import com.amazonaws.compute.apnortheast1.ec21311515583.dto.PaginationDTO;
 import com.amazonaws.compute.apnortheast1.ec21311515583.dto.RecipeDTO;
+import com.amazonaws.compute.apnortheast1.ec21311515583.util.Pagination;
 import com.opensymphony.xwork2.ActionSupport;
 
 
@@ -19,15 +21,25 @@ public class CreateRecipeAction extends ActionSupport implements SessionAware{
 
 	@SuppressWarnings("unchecked")
 	public String execute(){
+		if(session.isEmpty()){
+			return "sessionTimeout";
+		}
 		String result = SUCCESS;
 		RecipeDAO dao = new RecipeDAO();
 		RecipeDTO recipe = new RecipeDTO();
 		boolean res = false;
 
+		String dishName = String.valueOf(session.get("dishName"));
+		if(dishName =="" || dishName == "null"){
+			errorMsg = "料理名は必ず登録してください";
+			return ERROR;
+		}
 		recipe.setAuthor(String.valueOf(session.get("userId")));
 		recipe.setDishId(String.valueOf(session.get("dishId")));
 		recipe.setDishName(String.valueOf(session.get("dishName")));
-		recipe.setDishInfo(String.valueOf(session.get("dishInfo")));
+		if(String.valueOf(session.get("dishInfo"))!="null"){
+			recipe.setDishInfo(String.valueOf(session.get("dishInfo")));
+		}
 		recipe.setTagList((List<String>)session.get("tagList"));
 		recipe.setIngAmountList((List<List<String>>)session.get("ingAmountList"));
 		recipe.setProcList((List<String>)session.get("procList"));
@@ -58,9 +70,15 @@ public class CreateRecipeAction extends ActionSupport implements SessionAware{
 		session.remove("cookingTime");
 		session.remove("imageFilePath");
 		session.remove("imageFileName");
-		List<RecipeDTO> recipeList = new ArrayList<RecipeDTO>();
-		recipeList = dao.getUsersRecipe(String.valueOf(session.get("userId")));
-		session.put("recipeList", recipeList);
+		List<RecipeDTO> myRecipeList = new ArrayList<RecipeDTO>();
+		myRecipeList = dao.getUsersRecipe(String.valueOf(session.get("userId")));
+		session.put("myRecipeList", myRecipeList);
+		Pagination pagination = new Pagination();
+		PaginationDTO paginationDTO = new PaginationDTO();
+		paginationDTO = pagination.getPage(myRecipeList, 20, 1);
+		session.put("totalPageSize", paginationDTO.getTotalPageSize());
+		session.put("currentPageNo", paginationDTO.getCurrentPageNo());
+		session.put("myRecipeListForCurrentPage", paginationDTO.getRecipeListForCurrentPage());
 		return result;
 	}
 

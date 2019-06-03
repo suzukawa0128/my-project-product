@@ -10,7 +10,7 @@
 	<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
 	<div class="w-100">
 		<div class="w-75 mx-auto">
-			<a class="navbar-brand" href="#">Simple Recipe</a>
+			<span class="align-baseline">Simple Recipe</span>
 			<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber" aria-expanded="false" aria-label="ナビゲーションの切替">
 			  <span class="navbar-toggler-icon"></span>
 			</button>
@@ -18,8 +18,13 @@
 			<div class="collapse navbar-collapse float-right" id="Navber">
 				<s:form id="form" name="form">
 				<ul class="navbar-nav mr-auto">
+					<s:if test="#session.adminFlg!=null">
+						<li class="nav-item active">
+						  <a class="nav-link" href='<s:url action="GoAdminRecipeAction" />'>全てのレシピ</a>
+						</li>
+					</s:if>
 					<li class="nav-item active">
-					  <a class="nav-link" href='<s:url action="GoAllRecipeAction" />'>みんなのレシピ</a>
+					  <a class="nav-link" href='<s:url action="GoPublicRecipeAction" />'>みんなのレシピ</a>
 					</li>
 					<s:if test="#session.userId!=null">
 						<li class="nav-item active">

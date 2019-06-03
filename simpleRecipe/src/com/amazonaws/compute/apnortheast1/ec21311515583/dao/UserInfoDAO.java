@@ -126,6 +126,37 @@ public class UserInfoDAO {
 		return result;
 	}
 
+//	adminアカウントかどうか調べるメソッド
+	public boolean adminCheck(String mail, String pass){
+		boolean result = false;
+		String sql = "SELECT adminFlg FROM user_info WHERE mail=? AND pass=?";
+		Connection conn = null;
+		try{
+			DBConnector db = new DBConnector();
+			conn = db.getConnection();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, mail);
+			ps.setString(2, pass);
+			ResultSet rs = ps.executeQuery();
+
+			if(rs.next() && rs.getBoolean("adminFlg")){
+				result = true;
+			}
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+	}
+
 //	user_infoテーブルにユーザーを追加するメソッド
 	public boolean CreateUser(TempUserDTO tempUser){
 		String sql= "INSERT INTO user_info (user_id,mail,pass) VALUES(?,?,?)";

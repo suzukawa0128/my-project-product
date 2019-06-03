@@ -19,6 +19,9 @@ public class IngModalAction extends ActionSupport implements SessionAware{
 	private Map<String, Object> session;
 
 	public String execute(){
+		if(session.isEmpty()){
+			return "sessionTimeout";
+		}
 //		TODO
 //		分量のみの場合はエラーメッセージを表示する
 		if(!session.containsKey("ingAmountList") && ing!=null){
